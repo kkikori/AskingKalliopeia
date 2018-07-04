@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 import datetime as dt
+import pytz
 import simplejson as json
 
 import morphological_analysis
@@ -57,7 +58,7 @@ def main(DEBUG):
         t = "2016-12-13 05:46:42"
         now_time = dt.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     else:
-        now_time = dt.datetime.now(dt.timezone.utc)
+        now_time = dt.datetime.now(pytz.utc)
     print("now_time", now_time)
     f_paths = preparate_file_paths()
 
