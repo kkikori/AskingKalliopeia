@@ -3,7 +3,10 @@ class SentenceClass():
     def __init__(self, si, body, related_to, component_type):
         self.id = si
         self.body = body  # row sentence(str)
-        self.related_to = related_to
+        if not related_to:
+            self.related_to = None
+        else:
+            self.related_to = related_to["id"]
         self.component_type = component_type
 
         self.has_premise = []
