@@ -43,7 +43,7 @@ def _json_convert(ph):
 
 # 形態素解析の結果をjson形式で保存
 def _save_mrph(fw_path="", post=""):
-    mrph_data = []
+    mrph_data = {}
     for sentence in post["sentences"]:
         ss = normalize_main(sentence["body"])
         phs = mynlp.convert(sentence=ss)
@@ -51,7 +51,7 @@ def _save_mrph(fw_path="", post=""):
             phs_j = _json_convert(ph=phs)
         else:
             phs_j = {}
-        mrph_data.append(phs_j)
+        mrph_data[sentence["id"]]= phs_j
 
     f = str(post["id"]) + ".json"
     fn = fw_path / f
@@ -76,17 +76,10 @@ def _past_post_list_reader(fn):
 
 # スレッドごとに新しい投稿があるかどうか調べる
 # 新しく形態素解析したポストの文ごとの構文解析結果をリストで返す
-def _Take_out_new_posts(fr, fn_MrphAnalysis, pplist):
-    if not fr.is_file():
-        print("[file error]", fr.name, "is not found.")
-        return []
-    f = fr.open("r")
-    jsonData = json.load(f)
-    post_list = jsonData["posts"]
-
+def _Take_out_new_posts(thread, fn_MrphAnalysis, pplist):
     new_post_phs = []
     new_post_pi = []
-    for post in post_list:
+    for post in thread["posts"]:
         if str(post["id"]) in pplist:
             continue
         p_mrph = _save_mrph(fw_path=fn_MrphAnalysis, post=post)
@@ -100,21 +93,18 @@ def _add_post_list_writer(fn, add_post_pi):
     # 新たに読み込んだ投稿をリストに追記
     with fn.open("a") as f:
         for pi in add_post_pi:
-            f.write(str(pi)+ "\n")
+            f.write(str(pi) + "\n")
 
 
-def Mrph_analysis_main(fn_Classified, fn_MrphAnalysis, fn_PastPostList):
+def Mrph_analysis_main(threads_data, fn_MrphAnalysis, fn_PastPostList):
     # 形態素解析済みのポストリストを取得
     past_post_list = _past_post_list_reader(fn=fn_PastPostList)
 
-    # 全スレッドのパスを取得
-    files = [x for x in fn_Classified.iterdir() if x.is_dir()]
-
     new_post_phs = []
     add_post_pi = []
-    for fp in files:
-        print("reading thread", fp.name)
-        phs, new_post_pi = _Take_out_new_posts(fr=fp / "classified.json", fn_MrphAnalysis=fn_MrphAnalysis,
+    for thread in threads_data:
+        print("reading thread", thread["id"])
+        phs, new_post_pi = _Take_out_new_posts(thread=thread, fn_MrphAnalysis=fn_MrphAnalysis,
                                                pplist=past_post_list)
         new_post_phs.extend(phs)
         add_post_pi.extend(new_post_pi)

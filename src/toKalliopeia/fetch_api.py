@@ -27,9 +27,9 @@ def get_access_token(name, password):
     return response['token']
 
 
-def load_thread(token, data, thread_i):
-    en_p = "thread" + str(thread_i)
-    return _send(endpoint=en_p, data=data, token=token, type="get")
+def load_thread(token, thread_i):
+    en_p = "threads/" + str(thread_i)
+    return _send(endpoint=en_p, token=token, type="get")
 
 
 def load_threads(token):

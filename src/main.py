@@ -8,6 +8,7 @@ import morphological_analysis
 import preparation
 import question_generator
 import tfidf
+import toKalliopeia
 
 
 def time_setting(f_path):
@@ -62,11 +63,15 @@ def main(DEBUG):
     print("now_time", now_time)
     f_paths = preparate_file_paths()
 
+    ACCESS_TOKEN = {"name": "inu", "password": "test"}
+    token = toKalliopeia.get_access_token(ACCESS_TOKEN["name"], ACCESS_TOKEN["password"])
+    # スレッドデータをとってくる
+    threads_data = toKalliopeia.get_threads_data(token=token)
+
     # 形態素解析部
-    # 過去5分以内に新しい投稿があるかどうか判定し、新しい投稿を形態素した結果を保存
     if DEBUG:
         print("*" * 10, "Mrph_analysis", "*" * 20)
-    new_post_phs = morphological_analysis.Mrph_analysis_main(fn_Classified=f_paths["THREAD_CLASSIFIED"],
+    new_post_phs = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
                                                              fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
                                                              fn_PastPostList=f_paths["PAST_POST_LIST"])
     if DEBUG:
