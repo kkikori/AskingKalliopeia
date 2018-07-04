@@ -41,8 +41,8 @@ def read_mrph_per_post(f_path, pi):
     fn = str(pi) + ".json"
     f = (f_path / fn).open("r")
     jsonData = json.load(f)
-    p_phs = []
-    for tmp in jsonData:
+    p_phs = {}
+    for si, tmp in jsonData.items():
         phs = OrderedDict()
         if tmp == None:
             p_phs.append(None)
@@ -69,7 +69,7 @@ def read_mrph_per_post(f_path, pi):
                 word.proper_noun = mrph["proper_noun"]
                 ph.words.append(word)
             phs[bnst_i] = ph
-        p_phs.append(phs)
+        p_phs[si] = phs
     f.close()
 
     return p_phs
