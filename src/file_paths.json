@@ -1,0 +1,25 @@
+[
+  {
+    "DATA_ROOT": ".../results",
+    "STOP_WORD": "stopword.txt",
+    "SETTING": "setting.json",
+    "DICTIONARY": "dictionary.txt",
+    "WORD_LIST": "wordlist_per_post.csv",
+    "COLLECTIVE_Q": "to_collective_q_list.csv",
+    "INDIVIDUAL_Q": "to_individual_q_list.csv",
+    "POST_API": "PostApi",
+    "MRPH_ANALYSIS": "MrphAnalysis",
+    "PAST_POST_LIST": "past_post_list.txt"
+  },
+  {
+    "DATA_ROOT": "/Users/ida/Dropbox/kalliopeia_q_templates",
+    "NO_PREMISE_Q_TEMPLATES": "no_premise_q_templates.json",
+    "OVER_THREAD_Q_TEMPLATES": "over_thread_w_templates.json",
+    "HAS_NOD_Q_TEMPLATES": "has_nod_q_templates.json",
+    "SAME_CATEGORY_Q_TEMPLATES": "same_category_q_templates.json"
+  },
+  {
+    "DATA_ROOT": "/Users/ida/Dropbox/AskQuestion/dummy_data",
+    "THREAD_CLASSIFIED": "threads"
+  }
+]

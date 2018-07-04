@@ -1,0 +1,1 @@
+from .morphological_analysis_main import Mrph_analysis_main
