@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-import datetime
+import datetime as dt
 import simplejson as json
 
 import morphological_analysis
@@ -16,7 +16,7 @@ def time_setting(f_path):
 
     f = f_path.open("r")
     jsonData = json.load(f)
-    t = datetime.timedelta(minutes=int(jsonData["interval_time"]))
+    t = dt.timedelta(minutes=int(jsonData["interval_time"]))
     return t
 
 
@@ -55,9 +55,9 @@ def main(DEBUG):
         # 240 2016-12-15 16:49:28
         # 260 2016-12-15 20:09:14
         t = "2016-12-13 05:46:42"
-        now_time = datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
+        now_time = dt.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     else:
-        now_time = datetime.datetime.now()
+        now_time = dt.datetime.now(dt.timezone.utc)
     print("now_time", now_time)
     f_paths = preparate_file_paths()
 
