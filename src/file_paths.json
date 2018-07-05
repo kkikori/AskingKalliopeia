@@ -1,6 +1,6 @@
 [
   {
-    "DATA_ROOT": ".../results",
+    "DATA_ROOT": "/Users/ida/Dropbox/results_asking",
     "STOP_WORD": "stopword.txt",
     "SETTING": "setting.json",
     "DICTIONARY": "dictionary.txt",
@@ -19,7 +19,7 @@
     "SAME_CATEGORY_Q_TEMPLATES": "same_category_q_templates.json"
   },
   {
-    "DATA_ROOT": "/Users/ida/Dropbox/AskQuestion/dummy_data",
+    "DATA_ROOT": "/Users/ida/Dropbox/dummy_data",
     "THREAD_CLASSIFIED": "threads"
   }
 ]
