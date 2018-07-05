@@ -6,3 +6,4 @@ class UserClass():
         self.display_name = display_name
         self.role = role
         self.pi_list = []  # {"thi":th_i,"pi":pi} を一要素とするリスト
+        self.previousQ_list = []

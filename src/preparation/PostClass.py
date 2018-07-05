@@ -7,7 +7,7 @@ class PostClass():
         if not reply_to_id["Valid"]:
             self.reply_to_id = None
         else:
-            self.reply_to_id = reply_to_id
+            self.reply_to_id = reply_to_id["Int64"]
         self.user_id = user_id["id"]
         if not sentences:
             self.sentences = []

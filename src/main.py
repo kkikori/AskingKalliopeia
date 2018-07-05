@@ -56,10 +56,13 @@ def main(DEBUG):
     # アクセストークンの準備
     ACCESS_TOKEN = {"name": "inu", "password": "test"}
     token = toKalliopeia.get_access_token(ACCESS_TOKEN["name"], ACCESS_TOKEN["password"])
-    facilitator = toKalliopeia.get_user_info(token, ACCESS_TOKEN["name"])
 
     # スレッドデータをとってくる
     threads_data = toKalliopeia.get_threads_data(token=token)
+    users_data = toKalliopeia.get_users_data(token=token)
+
+    # ファシリテータの情報
+    facilitator_i = toKalliopeia.read_user_id(users_data, ACCESS_TOKEN["name"])
 
     # 形態素解析部
     if DEBUG:

@@ -35,20 +35,32 @@ def _preparate_per_thread(original_th):
             sentences.append(new_s)
             si_list.append(new_s.id)
 
-        new_p = preparation.PersonClass(pi=o_p["id"], \
-                                        created_at=o_p["created_at"], \
-                                        body=o_p["body"], \
-                                        reply_to_id=o_p["in_reply_to_id"], \
-                                        user_id=o_p["user"],
-                                        sentences=sentences,
-                                        si_list=si_list
-                                        )
+        new_p = preparation.PostClass(pi=o_p["id"], \
+                                      created_at=o_p["created_at"], \
+                                      body=o_p["body"], \
+                                      reply_to_id=o_p["in_reply_to_id"], \
+                                      user_id=o_p["user"],
+                                      sentences=sentences,
+                                      si_list=si_list
+                                      )
         pi_list.append(new_p.id)
         posts_list.append(new_p)
     thread = preparation.ThreadClass(original_th["id"], original_th["title"], posts_list, pi_list, pi_list[-1])
 
     _has_premise(thread=thread)
     return thread
+
+
+def _preparate_users(users):
+    User_list = {}
+    for usr in users:
+        pi_list = []
+        for post in usr["posts"]:
+            pi_list.append(post["id"])
+
+        new_user = preparation.UserClass(ui=usr["id"], name=usr["name"], \
+                                         display_name=usr["display_name"], role=usr["role"], \
+                                         pi_list=pi_list)
 
 
 def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
@@ -75,16 +87,17 @@ def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
             THREADS[th_i].previous_qs.append(int(row[0]))
 
 
-def preparate_main(fn_paths, threads):
+def preparate_main(fn_paths, threads, users):
+    # スレッドを用意
     Threads_list = []
-    User_list = {}
-
     for thread in threads:
         Threads_list.append(_preparate_per_thread(thread))
 
-    """
-    _previous_qs(THREADS=THREADS, POSTS=POSTS, USERS=USERS, f_individual=fn_paths["INDIVIDUAL_Q"], \
+    # ユーザリストを用意
+    User_list = _preparate_users(users)
+
+    _previous_qs(Threads_list=Threads_list, Post_list=Post_list, User_list=User_list, \
+                 f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
-    """
 
     return Threads_list, User_list

@@ -103,7 +103,7 @@ def Mrph_analysis_main(threads_data, fn_MrphAnalysis, fn_PastPostList):
     new_post_phs = []
     add_post_pi = []
     for thread in threads_data:
-        print("reading thread", thread["id"])
+        print("reading thread", thread["id"],thread["title"])
         phs, new_post_pi = _Take_out_new_posts(thread=thread, fn_MrphAnalysis=fn_MrphAnalysis,
                                                pplist=past_post_list)
         new_post_phs.extend(phs)

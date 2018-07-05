@@ -20,14 +20,26 @@ def get_threads_data(token):
     return threads_data
 
 
-def _get_ui(token, name):
+def _get_ui_list(token):
     users = load_users(token)
+    ui_list = []
+    for user in users:
+        ui_list.append(user["id"])
+    return ui_list
+
+
+def get_users_data(token):
+    ui_list = _get_ui_list(token)
+
+    users_data = []
+    for ui in ui_list:
+        users_data.append(load_user(token, ui))
+    return users_data
+
+
+def read_user_id(users, name):
+    #nameのユーザidを返す
     for user in users:
         if user["name"] == name:
             return user["id"]
     return False
-
-
-def get_user_info(token, name):
-    ui = _get_ui(token, name)
-    return load_user(token, ui)
