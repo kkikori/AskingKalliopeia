@@ -13,19 +13,12 @@ def _has_premise(thread):
                 continue
             if sentence.related_to in post.si_list:
                 relate_si = post.si_list.index(sentence.related_to)
-                thread.posts_list[pi].sentences[si].has_premise.append()
-
-    for pi, post in POSTS.items():
-        for si, s in enumerate(post.sentences):
-            if not s.pointer_post_id:
-                continue
-            ppi = s.pointer_post_id
-            psi = s.pointer_sentence_id
-            reltag = s.reltag
-            if pi == ppi:
-                POSTS[ppi].sentences[psi].has_premise.append([pi, si, reltag])
+                thread.posts_list[list_pi].sentences[relate_si].has_premise.append(sentence.id)
             else:
-                POSTS[ppi].sentences[psi].has_claim.append([pi, si, reltag])
+                relate_pi = thread.pi_list.index(post.reply_to_id)
+                relate_si = thread.posts_list[relate_pi].si_list.index(sentence.related_to)
+                thread.posts_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
+    return
 
 
 def _preparate_per_thread(original_th):
@@ -83,11 +76,11 @@ def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
 
 
 def preparate_main(fn_paths, threads):
-    THREADS = []
-    USERS = {}
+    Threads_list = []
+    User_list = {}
 
     for thread in threads:
-        _preparate_per_thread(thread)
+        Threads_list.append(_preparate_per_thread(thread))
 
     _previous_qs(THREADS=THREADS, POSTS=POSTS, USERS=USERS, f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
