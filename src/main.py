@@ -24,7 +24,7 @@ def time_setting(f_path):
 
 def preparate_file_paths():
     # ファイルパスの準備
-    fn = "file_paths.json"
+    fn = Path("file_paths.json")
     if not fn.is_file():
         print("[file error]", fn.name, "is not found.")
         sys.exit()
@@ -42,29 +42,22 @@ def preparate_file_paths():
 
 
 def main(DEBUG):
+    # 現在時刻の取得
     if DEBUG:
-        # 20 2016-12-12 17:12:22
-        # 40 2016-12-12 22:12:06
-        # 60 2016-12-13 05:46:42
-        # 80 2016-12-13 12:49:52
-        # 100 2016-12-13 19:59:17
-        # 120 2016-12-13 22:38:35
-        # 140 2016-12-14 06:28:28
-        # 160 2016-12-14 15:26:22
-        # 180 2016-12-14 18:33:13
-        # 200 2016-12-15 01:26:53
-        # 220 2016-12-15 13:06:51
-        # 240 2016-12-15 16:49:28
-        # 260 2016-12-15 20:09:14
         t = "2016-12-13 05:46:42"
         now_time = dt.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     else:
         now_time = dt.datetime.now(pytz.utc)
     print("now_time", now_time)
+
+    # ファイルパスの準備
     f_paths = preparate_file_paths()
 
+    # アクセストークン
     ACCESS_TOKEN = {"name": "inu", "password": "test"}
     token = toKalliopeia.get_access_token(ACCESS_TOKEN["name"], ACCESS_TOKEN["password"])
+    facilitator = toKalliopeia.
+
     # スレッドデータをとってくる
     threads_data = toKalliopeia.get_threads_data(token=token)
 

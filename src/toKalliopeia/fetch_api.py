@@ -34,3 +34,12 @@ def load_thread(token, thread_i):
 
 def load_threads(token):
     return _send(endpoint="threads", type="get", token=token)
+
+
+def load_users(token):
+    return _send(endpoint="users", type="get", token=token)
+
+
+def load_user(token, ui):
+    en_p = "users/" + str(ui)
+    return _send(endpoint=en_p, token=token, type="get")
