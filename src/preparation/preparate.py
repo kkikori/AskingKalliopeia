@@ -82,7 +82,9 @@ def preparate_main(fn_paths, threads):
     for thread in threads:
         Threads_list.append(_preparate_per_thread(thread))
 
+    """
     _previous_qs(THREADS=THREADS, POSTS=POSTS, USERS=USERS, f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
+    """
 
-    return POSTS, THREADS, USERS
+    return Threads_list, User_list

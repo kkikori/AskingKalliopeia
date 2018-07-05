@@ -53,10 +53,10 @@ def main(DEBUG):
     # ファイルパスの準備
     f_paths = preparate_file_paths()
 
-    # アクセストークン
+    # アクセストークンの準備
     ACCESS_TOKEN = {"name": "inu", "password": "test"}
     token = toKalliopeia.get_access_token(ACCESS_TOKEN["name"], ACCESS_TOKEN["password"])
-    facilitator = toKalliopeia.
+    facilitator = toKalliopeia.get_user_info(token, ACCESS_TOKEN["name"])
 
     # スレッドデータをとってくる
     threads_data = toKalliopeia.get_threads_data(token=token)
@@ -67,6 +67,8 @@ def main(DEBUG):
     new_post_phs = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
                                                              fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
                                                              fn_PastPostList=f_paths["PAST_POST_LIST"])
+
+    """
     if DEBUG:
         print("*" * 10, "TFIDF", "*" * 20)
     TFIDF_pp = tfidf.TFIDF_pp(f_dict=f_paths["DICTIONARY"], f_words=f_paths["WORD_LIST"], \
@@ -76,17 +78,19 @@ def main(DEBUG):
             TFIDF_pp.add_post_words(p_phs=p_phs)
 
         TFIDF_pp.overwrite_dic()
-
+    """
     if DEBUG:
         print("*" * 10, "preparation", "*" * 20)
     # 問いかけの準備
     THREAD, USERS = preparation.preparate_main(fn_paths=f_paths, threads=threads_data)
 
+    """
     if DEBUG:
         print("*" * 10, "question generate", "*" * 20)
     # 問いかけ生成
     question_generator.q_generator_main(POSTS=POSTS, THREAD=THREAD, USERS=USERS, f_paths=f_paths, TFIDF_pp=TFIDF_pp,
                                         now_time=now_time)
+    """
 
 
 if __name__ == '__main__':
