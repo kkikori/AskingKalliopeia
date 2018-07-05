@@ -5,26 +5,40 @@ import csv
 import mynlp, preparation
 
 
-def _has_premise(thread):
-    # 主張、前提の矢印を矢印の先のpostに格納する
-    for list_pi, post in enumerate(thread.posts_list):
+# def _has_premise(thread):
+#     # 主張、前提の矢印を矢印の先のpostに格納する
+#     for list_pi, post in enumerate(thread.posts_list):
+#         for list_si, sentence in enumerate(post.sentences):
+#             if not sentence.related_to:
+#                 continue
+#             if sentence.related_to in post.si_list:
+#                 relate_si = post.si_list.index(sentence.related_to)
+#                 thread.posts_list[list_pi].sentences[relate_si].has_premise.append(sentence.id)
+#             else:
+#                 relate_pi = thread.pi_list.index(post.reply_to_id)
+#                 relate_si = thread.posts_list[relate_pi].si_list.index(sentence.related_to)
+#                 thread.posts_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
+#     return
+
+
+def _has_premise(thread, Post_list):
+    for pi in thread.pi_list:
+        post = Post_list["pi"]
         for list_si, sentence in enumerate(post.sentences):
             if not sentence.related_to:
                 continue
             if sentence.related_to in post.si_list:
                 relate_si = post.si_list.index(sentence.related_to)
-                thread.posts_list[list_pi].sentences[relate_si].has_premise.append(sentence.id)
+                Post_list[pi].sentences[relate_si].has_premise.append(sentence.id)
             else:
-                relate_pi = thread.pi_list.index(post.reply_to_id)
-                relate_si = thread.posts_list[relate_pi].si_list.index(sentence.related_to)
-                thread.posts_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
+                relate_pi = post.reply_to_id
+                relate_si = Post_list[relate_pi].si_list.index(sentence.related_to)
+                Post_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
     return
 
 
-def _preparate_per_thread(original_th):
+def _preparate_per_thread(original_th, Post_list):
     pi_list = []
-    posts_list = []
-
     for o_p in original_th["posts"]:
         sentences = []
         si_list = []
@@ -44,10 +58,10 @@ def _preparate_per_thread(original_th):
                                       si_list=si_list
                                       )
         pi_list.append(new_p.id)
-        posts_list.append(new_p)
-    thread = preparation.ThreadClass(original_th["id"], original_th["title"], posts_list, pi_list, pi_list[-1])
+        Post_list[new_p.id] = new_p
+        thread = preparation.ThreadClass(original_th["id"], original_th["title"], pi_list, pi_list[-1])
 
-    _has_premise(thread=thread)
+        _has_premise(thread, Post_list)
     return thread
 
 
@@ -61,6 +75,8 @@ def _preparate_users(users):
         new_user = preparation.UserClass(ui=usr["id"], name=usr["name"], \
                                          display_name=usr["display_name"], role=usr["role"], \
                                          pi_list=pi_list)
+        User_list[usr["id"]] = new_user
+    return User_list
 
 
 def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
@@ -89,9 +105,10 @@ def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
 
 def preparate_main(fn_paths, threads, users):
     # スレッドを用意
-    Threads_list = []
+    Threads_list = {}
+    Post_list = {}
     for thread in threads:
-        Threads_list.append(_preparate_per_thread(thread))
+        Threads_list[thread["id"]] = _preparate_per_thread(thread, Post_list)
 
     # ユーザリストを用意
     User_list = _preparate_users(users)
