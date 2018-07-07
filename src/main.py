@@ -85,8 +85,11 @@ def main(DEBUG):
     if DEBUG:
         print("*" * 10, "preparation", "*" * 20)
     # 問いかけの準備
-    THREAD, POSTS, USERS = preparation.preparate_main(fn_paths=f_paths, threads=threads_data)
+    THREAD, POSTS, USERS = preparation.preparate_main(fn_paths=f_paths, threads=threads_data, users=users_data)
 
+    print("threads", THREAD.keys())
+    print("posts", POSTS.keys())
+    print("users", USERS.keys())
     """
     if DEBUG:
         print("*" * 10, "question generate", "*" * 20)
