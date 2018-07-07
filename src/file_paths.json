@@ -1,7 +1,6 @@
 [
   {
     "DATA_ROOT": "/Users/ida/Dropbox/results_asking",
-    "STOP_WORD": "stopword.txt",
     "SETTING": "setting.json",
     "DICTIONARY": "dictionary.txt",
     "WORD_LIST": "wordlist_per_post.csv",
@@ -10,6 +9,10 @@
     "POST_API": "PostApi",
     "MRPH_ANALYSIS": "MrphAnalysis",
     "PAST_POST_LIST": "past_post_list.txt"
+  },
+  {
+    "DATA_ROOT": "/Users/ida/Dropbox/AskQuestion",
+    "STOP_WORD": "stopword.txt"
   },
   {
     "DATA_ROOT": "/Users/ida/Dropbox/kalliopeia_q_templates",

@@ -71,7 +71,7 @@ def main(DEBUG):
                                                              fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
                                                              fn_PastPostList=f_paths["PAST_POST_LIST"])
 
-    """
+
     if DEBUG:
         print("*" * 10, "TFIDF", "*" * 20)
     TFIDF_pp = tfidf.TFIDF_pp(f_dict=f_paths["DICTIONARY"], f_words=f_paths["WORD_LIST"], \
@@ -81,7 +81,7 @@ def main(DEBUG):
             TFIDF_pp.add_post_words(p_phs=p_phs)
 
         TFIDF_pp.overwrite_dic()
-    """
+
     if DEBUG:
         print("*" * 10, "preparation", "*" * 20)
     # 問いかけの準備
