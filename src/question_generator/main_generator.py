@@ -53,9 +53,14 @@ def _judge_user_term(post, usr, now_time, thresholds):
     return False
 
 
-def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresholds):
+def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresholds, facilitator_i):
     # no_premise_qがダメだった場合のみ、q2が起動
     # どちらか問いかけが生成された場合はTrue、失敗した場合はFalseを返す
+
+    # ファシリテータは対象外
+    if user.id == facilitator_i:
+        return False
+
     judge = _judge_user_term(post=post, usr=user, now_time=now_time, thresholds=thresholds)
     if not judge:
         return False
@@ -82,13 +87,22 @@ def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresho
 
 
 # 問いかけを生成したらTrue,できなかったらFalseを返す
-def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thresholds, POSTS):
+def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thresholds, POSTS, facilitator_i):
+    # ファシリテータは対象外
+    if post.user_id == facilitator_i:
+        return False
     judge = _judge_thread_term(thread=thread, post=post, now_time=now_time, thresholds=thresholds)
     if not judge:
         return False
+    if not post.reply_to_id:
+        return False
+    if not POSTS[post.reply_to_id].user_id == facilitator_i:
+        return False
+
     for si, s in enumerate(post.sentences):
         if s.tag != "CLAIM" or not s.pointer_post_id:
             continue
+
         # q2をやる
         if len(s.body) < 10 and re.search(r_only_nod, s.body):
             print("try q2 generate", target_pi, si, thread.title)
@@ -128,7 +142,7 @@ def _judge_thread_term(thread, post, now_time, thresholds):
     return False
 
 
-def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time):
+def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilitator_i):
     # 閾値の設定
     thresholds = _setting_q_threshold(f_paths["SETTING"])
 
@@ -137,9 +151,9 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time):
     """
     individual = True
     for user_i, user in USERS.items():
-        target_pi = user.post_id_list[-1]
+        target_pi = user.pi_list[-1]
         q = _to_individual_q(user=user, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, f_paths=f_paths,
-                             TFIDF_pp=TFIDF_pp, thresholds=thresholds)
+                             TFIDF_pp=TFIDF_pp, thresholds=thresholds, facilitator_i=facilitator_i)
         if q:
             individual = False
 
@@ -152,8 +166,9 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time):
     to_collective_q
     """
     for th_i, thread in THREAD.items():
-        target_pi = thread.posts[-1]
+        target_pi = thread.pi_list[-1]
         q = _to_collective_q(thread=thread, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, \
-                             f_paths=f_paths, TFIDF_pp=TFIDF_pp, thresholds=thresholds, POSTS=POSTS)
+                             f_paths=f_paths, TFIDF_pp=TFIDF_pp, thresholds=thresholds, POSTS=POSTS,
+                             facilitator_i=facilitator_i)
 
     return

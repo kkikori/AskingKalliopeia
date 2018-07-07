@@ -43,3 +43,7 @@ def load_users(token):
 def load_user(token, ui):
     en_p = "users/" + str(ui)
     return _send(endpoint=en_p, token=token, type="get")
+
+
+def create_post(token, data):
+    _send(endpoint="posts", token=token, data=data,type="post")

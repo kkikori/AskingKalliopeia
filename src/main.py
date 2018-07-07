@@ -61,7 +61,7 @@ def main(DEBUG):
     threads_data = toKalliopeia.get_threads_data(token=token)
     users_data = toKalliopeia.get_users_data(token=token)
 
-    # ファシリテータの情報
+    # ファシリテータのid
     facilitator_i = toKalliopeia.read_user_id(users_data, ACCESS_TOKEN["name"])
 
     # 形態素解析部
@@ -95,7 +95,7 @@ def main(DEBUG):
         print("*" * 10, "question generate", "*" * 20)
     # 問いかけ生成
     question_generator.q_generator_main(POSTS=POSTS, THREAD=THREAD, USERS=USERS, f_paths=f_paths, TFIDF_pp=TFIDF_pp,
-                                        now_time=now_time)
+                                        now_time=now_time,facilitator_i=facilitator_i)
     """
 
 
