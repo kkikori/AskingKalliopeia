@@ -65,6 +65,7 @@ def _preparate_per_thread(original_th, Post_list):
     return thread
 
 
+# 1回以上投稿しているユーザのリストを返す
 def _preparate_users(users):
     User_list = {}
     for usr in users:
@@ -75,7 +76,8 @@ def _preparate_users(users):
         new_user = preparation.UserClass(ui=usr["id"], name=usr["name"], \
                                          display_name=usr["display_name"], role=usr["role"], \
                                          pi_list=pi_list)
-        User_list[usr["id"]] = new_user
+        if len(new_user.pi_list) > 0:
+            User_list[usr["id"]] = new_user
     return User_list
 
 
@@ -117,4 +119,4 @@ def preparate_main(fn_paths, threads, users):
                  f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
 
-    return Threads_list, User_list
+    return Threads_list, Post_list, User_list
