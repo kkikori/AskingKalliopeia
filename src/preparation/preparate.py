@@ -23,7 +23,7 @@ import mynlp, preparation
 
 def _has_premise(thread, Post_list):
     for pi in thread.pi_list:
-        post = Post_list["pi"]
+        post = Post_list[pi]
         for list_si, sentence in enumerate(post.sentences):
             if not sentence.related_to:
                 continue
@@ -55,7 +55,8 @@ def _preparate_per_thread(original_th, Post_list):
                                       reply_to_id=o_p["in_reply_to_id"], \
                                       user_id=o_p["user"],
                                       sentences=sentences,
-                                      si_list=si_list
+                                      si_list=si_list,
+                                      belong_th_i= original_th["id"]
                                       )
         pi_list.append(new_p.id)
         Post_list[new_p.id] = new_p
@@ -81,7 +82,7 @@ def _preparate_users(users):
     return User_list
 
 
-def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
+def _previous_qs(Threads_list, Post_list, User_list, f_individual, f_collective):
     # 過去に問いかけしたデータを読み込む
     if not f_individual.exists():
         print("[FILE ERROR]", f_individual, "is not found.")
@@ -91,8 +92,8 @@ def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
         reader = csv.reader(f)
         header = next(reader)
         for row in reader:
-            usr_i = POSTS[int(row[0])].user_id
-            USERS[usr_i].previous_qs.append(int(row[0]))
+            usr_i = Post_list[int(row[0])].user_id
+            User_list[usr_i].previous_qs.append(int(row[0]))
 
     if not f_collective.exists():
         print("[FILE ERROR]", f_collective, "is not found.")
@@ -101,8 +102,8 @@ def _previous_qs(THREADS, POSTS, USERS, f_individual, f_collective):
         reader = csv.reader(f)
         header = next(reader)
         for row in reader:
-            th_i = POSTS[int(row[0])].theread_id
-            THREADS[th_i].previous_qs.append(int(row[0]))
+            th_i = Post_list[int(row[0])].belong_th_i
+            Threads_list[th_i].previous_qs.append(int(row[0]))
 
 
 def preparate_main(fn_paths, threads, users):
@@ -115,8 +116,10 @@ def preparate_main(fn_paths, threads, users):
     # ユーザリストを用意
     User_list = _preparate_users(users)
 
+
     _previous_qs(Threads_list=Threads_list, Post_list=Post_list, User_list=User_list, \
                  f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
+
 
     return Threads_list, Post_list, User_list

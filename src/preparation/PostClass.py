@@ -1,6 +1,6 @@
 # 投稿のクラス
 class PostClass():
-    def __init__(self, pi, created_at, body, reply_to_id, user_id, sentences=None, si_list=None):
+    def __init__(self, pi, created_at, body, reply_to_id, user_id, belong_th_i, sentences=None, si_list=None):
         self.id = pi
         self.created_at = created_at
         self.body = body
@@ -17,3 +17,5 @@ class PostClass():
             self.si_list = []
         else:
             self.si_list = si_list
+
+        self.belong_th_i = belong_th_i
