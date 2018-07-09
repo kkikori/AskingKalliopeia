@@ -1,10 +1,10 @@
 import random
-import numpy as np
-from collections import defaultdict
 import sys
 import json
-
+from collections import defaultdict
 import mynlp
+
+r_only_nod = r"同意|賛成|同感|共感"
 
 
 def _read_templates(fn):
@@ -16,9 +16,6 @@ def _read_templates(fn):
     f.close()
 
     return jsonData
-
-
-r_only_nod = r"同意|賛成|同感|共感"
 
 
 def _choicer_category_by_tfidf(p_category, c_category, common_categorys, TFIDF_pp, parent, child):
@@ -54,44 +51,17 @@ def _choicer_category_by_tfidf(p_category, c_category, common_categorys, TFIDF_p
     return category_sorted[0]
 
 
-# テンプレ文に埋め込む節を抽出する
-def _extract_embed_word(phs="", category_words=""):
-    embed_words_candidate = []
-    # print("           category words", category_words)
-
-    # カテゴリを持つ単語の文節idリスト
-    category_word_ph_ids = [int(n) for n in list(np.array(category_words)[:, 1])]
-
-    for cw in category_words:
-        # print(" cw :", cw)
-        depend_ids = mynlp.search_dependency_pi(phs, cw[1])
-        # print("   depend_ids :", depend_ids)
-        # 長すぎる名詞節は取り除く
-        if len(depend_ids) > 2 and len(embed_words_candidate) != 0:
-            continue
-        # 単語cw[0]にかかっている文節と同カテゴリの単語の属する文節の共起をみる
-        common_ph = set(depend_ids) & set(category_word_ph_ids)
-        # print("   common_ph :", common_ph)
-        if len(common_ph) > 0:
-            embed_words_candidate.pop(-1)
-        embed_words_candidate.append(
-            mynlp.search_dependency(phs, cw[1]) + mynlp.extra_relate_word_in_ph(phs[cw[1]], cw[0]))
-    return embed_words_candidate
-
-
 # テンプレ文を生成
-def _same_category(p_category, c_category, p_ph, c_ph, th_title, f_tmp):
-    templates = _read_templates(fn=f_tmp)
+def _same_category(p_category, c_category, th_title, fn):
+    templates = _read_templates(fn)
 
-    p_words = _extract_embed_word(phs=p_ph, category_words=p_category)
-    c_words = _extract_embed_word(phs=c_ph, category_words=c_category)
-
-    category_words = list(set(p_words + c_words))
+    category_words = list(set(p_category + c_category))
     c = "、".join(random.sample(category_words, 3))
+    r_msg = random.choice(templates["cushions"])
+    r_t = random.choice(templates["templates"])
+    r_t = r_t.replace("<c>", c).replace("<title>", th_title)
 
-    rmsg = random.choice(templates["templates"]).replace("<c>", c).replace("<title>", th_title)
-
-    return random.choice(templates["cushions"]) + rmsg
+    return r_msg + r_t
 
 
 # カテゴリ・ドメインを持つ単語のみ抽出
@@ -109,7 +79,7 @@ def _extract_category_domain(phs):
 
 # 親投稿文と投稿文が同じカテゴリに属する単語を持っている場合はテンプレ文を返す
 # p_ph = 親投稿の形態素情報
-def same_category_q_generator(TFIDF_pp="", parent="", child="", th_title="", f_mrph="", f_tmp=""):
+def same_category_q_generator(TFIDF_pp="", parent="", child="", th_title="", f_mrph="", f_same=""):
     p_phs = mynlp.read_mrph_per_post(f_path=f_mrph, pi=parent["pi"])
     c_phs = mynlp.read_mrph_per_post(f_path=f_mrph, pi=child["pi"])
 
@@ -129,8 +99,8 @@ def same_category_q_generator(TFIDF_pp="", parent="", child="", th_title="", f_m
     ca_n = _choicer_category_by_tfidf(p_category=p_category, c_category=c_category, \
                                       common_categorys=common_category, TFIDF_pp=TFIDF_pp, \
                                       parent=parent, child=child)
-    r_msg = _same_category(p_category[ca_n], c_category[ca_n], p_phs[parent["si"]], c_phs[child["si"]], \
-                           th_title, f_tmp)
+    r_msg = _same_category(p_category[ca_n], c_category[ca_n], \
+                           th_title=th_title, fn=f_same)
     if not r_msg:
         print("   nazo no false")
     return r_msg

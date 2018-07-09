@@ -90,13 +90,13 @@ def main(DEBUG):
     print("threads", THREAD.keys())
     print("posts", POSTS.keys())
     print("users", USERS.keys())
-    """
+
     if DEBUG:
         print("*" * 10, "question generate", "*" * 20)
     # 問いかけ生成
     question_generator.q_generator_main(POSTS=POSTS, THREAD=THREAD, USERS=USERS, f_paths=f_paths, TFIDF_pp=TFIDF_pp,
                                         now_time=now_time,facilitator_i=facilitator_i)
-    """
+
 
 
 if __name__ == '__main__':
