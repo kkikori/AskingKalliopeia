@@ -35,14 +35,16 @@ class TFIDF_pp():
         self.corpus = ""
         self.pos_l = ["名詞", "動詞", "形容詞"]
 
-    def add_post_words(self, p_phs):
+    def add_post_words(self, f, pi):
+        p_phs = read_mrph_per_post(f, pi)
         # 調べるポストの単語を抽出
         add_words_to_dictionary = []
         for phs in p_phs:
             # 文ごとに単語を抽出（ストップワードは除く）
-            # print("phs=", phs)
+            print("phs=", phs)
             wlist = filter_word(phs, self.pos_l, self.stop_word_list)
             add_words_to_dictionary.extend(wlist)
+
         self.dictionary.add_documents([add_words_to_dictionary])
         self.texts.append(add_words_to_dictionary)
         self.corpus = [self.dictionary.doc2bow(text) for text in self.texts]

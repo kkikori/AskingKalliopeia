@@ -99,14 +99,18 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
     if not POSTS[post.reply_to_id].user_id == facilitator_i:
         return False
 
-    for si, s in enumerate(post.sentences):
-        if s.tag != "CLAIM" or not s.pointer_post_id:
-            continue
+    reply_to_id = post.reply_to_id
+    related_to_post = POSTS[reply_to_id]
 
+    for si, s in enumerate(post.sentences):
+        if s.tag != "CLAIM":
+            continue
+        reply_to_si = related_to_post.si_list.index(s.related_to)
         # q2をやる
         if len(s.body) < 10 and re.search(r_only_nod, s.body):
             print("try q2 generate", target_pi, si, thread.title)
-            q3 = question_generator.has_nod_q_generator(post=POSTS[s.pointer_post_id], si=s.pointer_sentence_id, \
+
+            q3 = question_generator.has_nod_q_generator(post=POSTS[reply_to_id], si=reply_to_si, \
                                                         thread_title=thread.title, f_tmp=f_paths["HAS_NOD_Q_TEMPLATES"])
             if q3:
                 _save_and_call_q(pi=target_pi, si=si, q_body=q3, fn_postapi=f_paths["POST_API"], \
@@ -114,7 +118,7 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
                 return True
 
         target_id = {"pi": target_pi, "si": si}
-        pointer_id = {"pi": s.pointer_post_id, "si": s.pointer_sentence_id}
+        pointer_id = {"pi": reply_to_id, "si": reply_to_si}
         print("try q3 generate ", target_pi, si)
         q4 = question_generator.same_category_q_generator(TFIDF_pp=TFIDF_pp, parent=pointer_id, child=target_id, \
                                                           th_title=thread.title, f_mrph=f_paths["MRPH_ANALYSIS"], \

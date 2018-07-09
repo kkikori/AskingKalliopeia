@@ -67,18 +67,19 @@ def main(DEBUG):
     # 形態素解析部
     if DEBUG:
         print("*" * 10, "Mrph_analysis", "*" * 20)
-    new_post_phs = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
+    new_post_phs,new_post_pi = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
                                                              fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
                                                              fn_PastPostList=f_paths["PAST_POST_LIST"])
 
 
     if DEBUG:
         print("*" * 10, "TFIDF", "*" * 20)
+    print("new_post_phs",new_post_phs)
     TFIDF_pp = tfidf.TFIDF_pp(f_dict=f_paths["DICTIONARY"], f_words=f_paths["WORD_LIST"], \
                               f_stopw=f_paths["STOP_WORD"], f_mrph=f_paths["MRPH_ANALYSIS"])
-    if len(new_post_phs) > 0:
-        for p_phs in new_post_phs:
-            TFIDF_pp.add_post_words(p_phs=p_phs)
+    if len(new_post_pi) > 0:
+        for pi in new_post_pi:
+            TFIDF_pp.add_post_words(pi=pi,f= f_paths["MRPH_ANALYSIS"])
 
         TFIDF_pp.overwrite_dic()
 

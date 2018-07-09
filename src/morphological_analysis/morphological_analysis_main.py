@@ -51,7 +51,7 @@ def _save_mrph(fw_path="", post=""):
             phs_j = _json_convert(ph=phs)
         else:
             phs_j = {}
-        mrph_data[sentence["id"]]= phs_j
+        mrph_data[sentence["id"]] = phs_j
 
     f = str(post["id"]) + ".json"
     fn = fw_path / f
@@ -103,7 +103,7 @@ def Mrph_analysis_main(threads_data, fn_MrphAnalysis, fn_PastPostList):
     new_post_phs = []
     add_post_pi = []
     for thread in threads_data:
-        print("reading thread", thread["id"],thread["title"])
+        print("reading thread", thread["id"], thread["title"])
         phs, new_post_pi = _Take_out_new_posts(thread=thread, fn_MrphAnalysis=fn_MrphAnalysis,
                                                pplist=past_post_list)
         new_post_phs.extend(phs)
@@ -111,4 +111,4 @@ def Mrph_analysis_main(threads_data, fn_MrphAnalysis, fn_PastPostList):
 
     _add_post_list_writer(fn=fn_PastPostList, add_post_pi=add_post_pi)
 
-    return new_post_phs
+    return new_post_phs, new_post_pi
