@@ -56,7 +56,7 @@ def _preparate_per_thread(original_th, Post_list):
                                       user_id=o_p["user"],
                                       sentences=sentences,
                                       si_list=si_list,
-                                      belong_th_i= original_th["id"]
+                                      belong_th_i=original_th["id"]
                                       )
         pi_list.append(new_p.id)
         Post_list[new_p.id] = new_p
@@ -79,6 +79,8 @@ def _preparate_users(users):
                                          pi_list=pi_list)
         if len(new_user.pi_list) > 0:
             User_list[usr["id"]] = new_user
+        else:
+            print("  not post user", new_user.name)
     return User_list
 
 
@@ -116,10 +118,8 @@ def preparate_main(fn_paths, threads, users):
     # ユーザリストを用意
     User_list = _preparate_users(users)
 
-
     _previous_qs(Threads_list=Threads_list, Post_list=Post_list, User_list=User_list, \
                  f_individual=fn_paths["INDIVIDUAL_Q"], \
                  f_collective=fn_paths["COLLECTIVE_Q"])
-
 
     return Threads_list, Post_list, User_list

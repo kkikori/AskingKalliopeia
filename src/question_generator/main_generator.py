@@ -38,6 +38,7 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
 
 def _judge_user_term(post, usr, now_time, thresholds):
     if (now_time - post.created_at) < thresholds["t_user"]:
+        print("     time setting")
         return False
 
     # 今まで一度も問いかけしていなかったら
@@ -64,9 +65,11 @@ def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresho
     judge = _judge_user_term(post=post, usr=user, now_time=now_time, thresholds=thresholds)
     if not judge:
         return False
+        print("   judge is not")
     for si, s in enumerate(post.sentences):
         if s.component_type != "CLAIM" or len(s.has_premise) > 1:
             continue
+            print("     not claim")
         elif re.search(r_question, s.body):
             # 質問文は除く措置
             continue
@@ -93,10 +96,12 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
         return False
     judge = _judge_thread_term(thread=thread, post=post, now_time=now_time, thresholds=thresholds)
     if not judge:
+        print("   judge is not")
         return False
     if not post.reply_to_id:
         return False
     if not POSTS[post.reply_to_id].user_id == facilitator_i:
+        print("   not to facilitator")
         return False
 
     reply_to_id = post.reply_to_id
@@ -104,6 +109,7 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
 
     for si, s in enumerate(post.sentences):
         if s.component_type != "CLAIM":
+            print("     not claim")
             continue
         reply_to_si = related_to_post.si_list.index(s.related_to)
         # q2をやる
@@ -132,6 +138,7 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
 
 def _judge_thread_term(thread, post, now_time, thresholds):
     if now_time - post.created_at < thresholds["t_thread"]:
+        print("     time setting", now_time, post.created_at)
         return False
 
     if len(thread.previousQ_list) == 0:
@@ -154,7 +161,9 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     to_individual_q
     """
     individual = True
+    print("to_individual_q")
     for user_i, user in USERS.items():
+        print("   user", user.name)
         target_pi = user.pi_list[-1]
         q = _to_individual_q(user=user, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, f_paths=f_paths,
                              TFIDF_pp=TFIDF_pp, thresholds=thresholds, facilitator_i=facilitator_i)
@@ -169,7 +178,9 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     """
     to_collective_q
     """
+    print("to_collective_q")
     for th_i, thread in THREAD.items():
+        print("  thread :", thread.title)
         target_pi = thread.pi_list[-1]
         q = _to_collective_q(thread=thread, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, \
                              f_paths=f_paths, TFIDF_pp=TFIDF_pp, thresholds=thresholds, POSTS=POSTS,

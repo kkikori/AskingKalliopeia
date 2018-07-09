@@ -44,7 +44,6 @@ def _json_convert(ph):
 # 形態素解析の結果をjson形式で保存
 def _save_mrph(fw_path="", post=""):
     mrph_data = []
-    print("save_mrph,")
     for sentence in post["sentences"]:
         ss = normalize_main(sentence["body"])
         phs = mynlp.convert(sentence=ss)
@@ -57,7 +56,6 @@ def _save_mrph(fw_path="", post=""):
     f = str(post["id"]) + ".json"
     fn = fw_path / f
     fw = fn.open("w")
-    print(mrph_data)
     json.dump(mrph_data, fw, indent=2, ensure_ascii=False)
     fw.close()
 
