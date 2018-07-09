@@ -54,8 +54,14 @@ def _choicer_category_by_tfidf(p_category, c_category, common_categorys, TFIDF_p
 # テンプレ文を生成
 def _same_category(p_category, c_category, th_title, fn):
     templates = _read_templates(fn)
-
-    category_words = list(set(p_category + c_category))
+    print(p_category, c_category)
+    p_c = []
+    for p in p_category:
+        p_c.append(p[0])
+    c_c = []
+    for p in c_category:
+        c_c.append(p[0])
+    category_words = list(set(p_c + c_c))
     c = "、".join(random.sample(category_words, 3))
     r_msg = random.choice(templates["cushions"])
     r_t = random.choice(templates["templates"])

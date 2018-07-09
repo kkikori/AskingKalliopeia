@@ -95,7 +95,7 @@ def _previous_qs(Threads_list, Post_list, User_list, f_individual, f_collective)
         header = next(reader)
         for row in reader:
             usr_i = Post_list[int(row[0])].user_id
-            User_list[usr_i].previous_qs.append(int(row[0]))
+            User_list[usr_i].previousQ_list.append(int(row[0]))
 
     if not f_collective.exists():
         print("[FILE ERROR]", f_collective, "is not found.")
@@ -105,7 +105,7 @@ def _previous_qs(Threads_list, Post_list, User_list, f_individual, f_collective)
         header = next(reader)
         for row in reader:
             th_i = Post_list[int(row[0])].belong_th_i
-            Threads_list[th_i].previous_qs.append(int(row[0]))
+            Threads_list[th_i].previousQ_list.append(int(row[0]))
 
 
 def preparate_main(fn_paths, threads, users):
