@@ -54,32 +54,33 @@ def main(DEBUG):
     f_paths = preparate_file_paths()
 
     # アクセストークンの準備
-    ACCESS_TOKEN = {"name": "inu", "password": "test"}
+    print("access")
+    ACCESS_TOKEN = {"name": "facilitator", "password": "test"}
     token = toKalliopeia.get_access_token(ACCESS_TOKEN["name"], ACCESS_TOKEN["password"])
 
     # スレッドデータをとってくる
+    print("thread")
     threads_data = toKalliopeia.get_threads_data(token=token)
     users_data = toKalliopeia.get_users_data(token=token)
 
     # ファシリテータのid
+    print("ファシリテータのid")
     facilitator_i = toKalliopeia.read_user_id(users_data, ACCESS_TOKEN["name"])
 
     # 形態素解析部
     if DEBUG:
         print("*" * 10, "Mrph_analysis", "*" * 20)
-    new_post_phs,new_post_pi = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
-                                                             fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
-                                                             fn_PastPostList=f_paths["PAST_POST_LIST"])
-
+    new_post_phs, new_post_pi = morphological_analysis.Mrph_analysis_main(threads_data=threads_data,
+                                                                          fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
+                                                                          fn_PastPostList=f_paths["PAST_POST_LIST"])
 
     if DEBUG:
         print("*" * 10, "TFIDF", "*" * 20)
-    print("new_post_phs",new_post_phs)
     TFIDF_pp = tfidf.TFIDF_pp(f_dict=f_paths["DICTIONARY"], f_words=f_paths["WORD_LIST"], \
                               f_stopw=f_paths["STOP_WORD"], f_mrph=f_paths["MRPH_ANALYSIS"])
     if len(new_post_pi) > 0:
         for pi in new_post_pi:
-            TFIDF_pp.add_post_words(pi=pi,f= f_paths["MRPH_ANALYSIS"])
+            TFIDF_pp.add_post_words(pi=pi, f=f_paths["MRPH_ANALYSIS"])
 
         TFIDF_pp.overwrite_dic()
 
@@ -96,10 +97,9 @@ def main(DEBUG):
         print("*" * 10, "question generate", "*" * 20)
     # 問いかけ生成
     question_generator.q_generator_main(POSTS=POSTS, THREAD=THREAD, USERS=USERS, f_paths=f_paths, TFIDF_pp=TFIDF_pp,
-                                        now_time=now_time,facilitator_i=facilitator_i)
+                                        now_time=now_time, facilitator_i=facilitator_i)
 
-
-
+    toKalliopeia.create_post_main(fn=f_paths["POST_API"], token=token)
 
 
 if __name__ == '__main__':
