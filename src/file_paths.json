@@ -15,7 +15,7 @@
     "STOP_WORD": "stopword.txt"
   },
   {
-    "DATA_ROOT": "/Users/ida/Dropbox/kalliopeia_q_templates",
+    "DATA_ROOT": "/Users/ida/Dropbox/AskQuestion-dagree/question_templates",
     "NO_PREMISE_Q_TEMPLATES": "no_premise_q_templates.json",
     "OVER_THREAD_Q_TEMPLATES": "over_thread_w_templates.json",
     "HAS_NOD_Q_TEMPLATES": "has_nod_q_templates.json",
