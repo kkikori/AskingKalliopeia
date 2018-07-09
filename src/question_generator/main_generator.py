@@ -99,9 +99,10 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
         print("   judge is not")
         return False
     if not post.reply_to_id:
+        print("   post.reply_to_id")
         return False
-    if not POSTS[post.reply_to_id].user_id == facilitator_i:
-        print("   not to facilitator")
+    if POSTS[post.reply_to_id].user_id == facilitator_i:
+        print("   to facilitator")
         return False
 
     reply_to_id = post.reply_to_id
@@ -118,6 +119,8 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
 
             q3 = question_generator.has_nod_q_generator(post=POSTS[reply_to_id], si=reply_to_si, \
                                                         thread_title=thread.title, f_tmp=f_paths["HAS_NOD_Q_TEMPLATES"])
+            if not q3:
+                print("    it is my fault")
             if q3:
                 _save_and_call_q(pi=target_pi, si=si, q_body=q3, fn_postapi=f_paths["POST_API"], \
                                  f_save=f_paths["COLLECTIVE_Q"])
@@ -133,6 +136,8 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
             _save_and_call_q(pi=target_pi, si=si, q_body=q4, fn_postapi=f_paths["POST_API"], \
                              f_save=f_paths["COLLECTIVE_Q"])
             return True
+        else :
+            print("    it is my fault")
     return False
 
 
