@@ -41,10 +41,9 @@ class TFIDF_pp():
         add_words_to_dictionary = []
         for phs in p_phs:
             # 文ごとに単語を抽出（ストップワードは除く）
-            print("phs=", phs)
-            for ph in phs:
-                wlist = filter_word(ph, self.pos_l, self.stop_word_list)
-                add_words_to_dictionary.extend(wlist)
+
+            wlist = filter_word(phs, self.pos_l, self.stop_word_list)
+            add_words_to_dictionary.extend(wlist)
 
         self.dictionary.add_documents([add_words_to_dictionary])
         self.texts.append(add_words_to_dictionary)

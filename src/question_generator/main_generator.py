@@ -41,14 +41,14 @@ def _judge_user_term(post, usr, now_time, thresholds):
         return False
 
     # 今まで一度も問いかけしていなかったら
-    if len(usr.previous_qs) == 0:
+    if len(usr.previousQ_list) == 0:
         return True
 
     # 最後に質問した投稿のid
-    pq_i = usr.previous_qs[-1]
-    pq_idx = usr.post_id_list.index(pq_i)
+    pq_i = usr.previousQ_list[-1]
+    pq_idx = usr.pi_list.index(pq_i)
 
-    if len(usr.post_id_list) - 1 - pq_idx > thresholds["c_user"]:
+    if len(usr.pi_list) - 1 - pq_idx > thresholds["c_user"]:
         return True
     return False
 
@@ -65,7 +65,7 @@ def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresho
     if not judge:
         return False
     for si, s in enumerate(post.sentences):
-        if s.tag != "CLAIM" or len(s.has_premise) > 1:
+        if s.component_type != "CLAIM" or len(s.has_premise) > 1:
             continue
         elif re.search(r_question, s.body):
             # 質問文は除く措置
@@ -103,7 +103,7 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
     related_to_post = POSTS[reply_to_id]
 
     for si, s in enumerate(post.sentences):
-        if s.tag != "CLAIM":
+        if s.component_type != "CLAIM":
             continue
         reply_to_si = related_to_post.si_list.index(s.related_to)
         # q2をやる
@@ -134,14 +134,14 @@ def _judge_thread_term(thread, post, now_time, thresholds):
     if now_time - post.created_at < thresholds["t_thread"]:
         return False
 
-    if len(thread.previous_qs) == 0:
+    if len(thread.previousQ_list) == 0:
         return True
 
     # 最後に質問した投稿のid
-    pq_i = thread.previous_qs[-1]
-    pq_idx = thread.posts.index(pq_i)
+    pq_i = thread.previousQ_list[-1]
+    pq_idx = thread.pi_list.index(pq_i)
 
-    if len(thread.posts) - 1 - pq_idx > thresholds["c_thread"]:
+    if len(thread.pi_list) - 1 - pq_idx > thresholds["c_thread"]:
         return True
     return False
 

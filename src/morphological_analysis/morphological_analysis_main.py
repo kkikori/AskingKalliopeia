@@ -57,6 +57,7 @@ def _save_mrph(fw_path="", post=""):
     f = str(post["id"]) + ".json"
     fn = fw_path / f
     fw = fn.open("w")
+    print(mrph_data)
     json.dump(mrph_data, fw, indent=2, ensure_ascii=False)
     fw.close()
 

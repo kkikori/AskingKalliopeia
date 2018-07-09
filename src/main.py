@@ -48,6 +48,8 @@ def main(DEBUG):
         now_time = dt.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     else:
         now_time = dt.datetime.now(pytz.utc)
+        n_str = now_time.strftime("%Y-%m-%dT%H:%M:%S")
+        now_time = dt.datetime.strptime(n_str, "%Y-%m-%dT%H:%M:%S")
     print("now_time", now_time)
 
     # ファイルパスの準備
