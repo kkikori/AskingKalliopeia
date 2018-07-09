@@ -62,7 +62,11 @@ def _same_category(p_category, c_category, th_title, fn):
     for p in c_category:
         c_c.append(p[0])
     category_words = list(set(p_c + c_c))
-    c = "、".join(random.sample(category_words, 3))
+    print("category_words",category_words)
+    if len(category_words)>3:
+        c = "、".join(random.sample(category_words, 3))
+    else:
+        c = "、".join(category_words)
     r_msg = random.choice(templates["cushions"])
     r_t = random.choice(templates["templates"])
     r_t = r_t.replace("<c>", c).replace("<title>", th_title)

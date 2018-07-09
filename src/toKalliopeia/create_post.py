@@ -5,12 +5,9 @@ from .fetch_api import create_post
 def _post_post(f, token):
     ff = f.open("r")
     jsonData = json.load(ff)
-    data = {}
     data = {"body": jsonData["body"],
             "in_reply_to_id": jsonData["in_reply_to_id"]}
     create_post(token=token, data=data)
-
-    f.unlink()
 
 
 def create_post_main(fn, token):
