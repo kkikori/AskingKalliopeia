@@ -43,7 +43,7 @@ def _json_convert(ph):
 
 # 形態素解析の結果をjson形式で保存
 def _save_mrph(fw_path="", post=""):
-    mrph_data = {}
+    mrph_data = []
     for sentence in post["sentences"]:
         ss = normalize_main(sentence["body"])
         phs = mynlp.convert(sentence=ss)
@@ -51,7 +51,7 @@ def _save_mrph(fw_path="", post=""):
             phs_j = _json_convert(ph=phs)
         else:
             phs_j = {}
-        mrph_data[sentence["id"]] = phs_j
+        mrph_data.append(phs_j)
 
     f = str(post["id"]) + ".json"
     fn = fw_path / f
@@ -111,4 +111,4 @@ def Mrph_analysis_main(threads_data, fn_MrphAnalysis, fn_PastPostList):
 
     _add_post_list_writer(fn=fn_PastPostList, add_post_pi=add_post_pi)
 
-    return new_post_phs, new_post_pi
+    return new_post_phs, add_post_pi
