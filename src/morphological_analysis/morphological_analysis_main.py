@@ -1,6 +1,5 @@
 import simplejson as json
 import sys
-import datetime
 from collections import OrderedDict
 
 import mynlp
