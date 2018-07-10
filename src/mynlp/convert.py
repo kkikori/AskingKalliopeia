@@ -132,6 +132,7 @@ def convert(sentence):
                     new_words[0].pos_detail = o_words[oi].pos_detail
 
             """合成があった場合の共通の処理"""
+            new_words[0].original_words.extend([o_words[oi].base, new_words[0].base])
             # baseとsurfaceのいじる順番を変えちゃダメ
             new_words[0].base = o_words[oi].surface + new_words[0].base
             new_words[0].surface = o_words[oi].surface + new_words[0].surface

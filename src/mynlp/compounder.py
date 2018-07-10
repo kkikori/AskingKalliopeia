@@ -1,21 +1,24 @@
 import mynlp
 
+
 # 受け取った、w1,w2の単語をくっつける
 # 品詞はw2を受け継ぐ
 def _cross_word(w1, w2):
-    nw = mynlp.Word()
+    nw = mynlp.WordClass()
     nw.base = w1.surface + w2.base
     nw.surface = w1.surface + w2.surface
     nw.yomi = w1.yomi + w2.yomi
 
     nw.pos = w2.pos
     nw.pos_detail = w2.pos_detail
-    if w1.original_words:
-        ll = w1.original_words
-        ll.append(w2.base)
-        nw.original_words = ll
+
+    ll = w1.original_words
+    if len(w2.original_words) > 0:
+        ll.extend(w2.original_words)
     else:
-        nw.original_words = [w1.base, w2.base]
+        ll.append(w2.base)
+    nw.original_words = ll
+
     try:
         nw.descriptions = w1.descriptions + "," + w2.descriptions
     except:
