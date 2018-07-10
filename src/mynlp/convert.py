@@ -27,16 +27,11 @@ def _knp(sentence):
     # 情報をクラスに格納
     phrases = OrderedDict()  # 文節クラスのディクショナリ
     for bnst in result.bnst_list():
-        ph = mynlp.Phrase()
-        ph.parent_id = bnst.parent_id
-        ph.dpndtype = bnst.dpndtype
+        ph = mynlp.PhraseClass(parent_id=bnst.parent_id, dpndtype=bnst.dpndtype)
 
         # この文節にふくまれる単語情報を格納
         for mrph in bnst.mrph_list():  # mrph_list:文節内の形態素リスト
-            word = mynlp.Word()
-            word.surface = mrph.midasi  # 表層形
-            word.base = mrph.genkei  # 原型
-            word.yomi = mrph.yomi  # 読み
+            word = mynlp.WordClass(surface=mrph.midasi, base=mrph.genkei, yomi=mrph.yomi)
 
             # 品詞関連詳細情報
             pos_info = mrph.spec().split(" ")  # or .new_spec()
