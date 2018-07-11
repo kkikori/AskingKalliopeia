@@ -1,5 +1,6 @@
-import json, mynlp
+import simplejson as json
 from collections import OrderedDict
+import mynlp
 
 # dict型をクラスに格納する
 def _embed_to_class(bnsts):
