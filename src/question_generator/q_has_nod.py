@@ -1,6 +1,6 @@
 import random
 import sys
-import json
+import simplejson as json
 
 def _read_templates(fn):
     if not fn.is_file():
@@ -15,7 +15,7 @@ def _read_templates(fn):
 
 def has_nod_q_generator(post, si, thread_title,fn):
     templates = _read_templates(fn)
-    select_template = random.choice(only_nod_template_with_premise)
+    select_template = random.choice(templates)
 
     claim_s = post.sentences[si].body
 
@@ -28,4 +28,4 @@ def has_nod_q_generator(post, si, thread_title,fn):
             premise_s = post.sentences[si + 1].body
             return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("<s2>", premise_s)
 
-    return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("<s2>", "")
+    return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("　- 『<s2>』", "")

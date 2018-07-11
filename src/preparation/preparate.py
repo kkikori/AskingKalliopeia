@@ -1,6 +1,4 @@
 import sys
-import json
-import datetime
 import csv
 import mynlp, preparation
 
