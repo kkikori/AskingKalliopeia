@@ -76,6 +76,7 @@ def main(DEBUG):
                                                                           fn_MrphAnalysis=f_paths["MRPH_ANALYSIS"],
                                                                           fn_PastPostList=f_paths["PAST_POST_LIST"])
 
+    # TFIDFのクラスの準備
     if DEBUG:
         print("*" * 10, "TFIDF", "*" * 20)
     TFIDF_pp = tfidf.TFIDF_pp(f_dict=f_paths["DICTIONARY"], f_words=f_paths["WORD_LIST"], \

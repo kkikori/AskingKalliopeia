@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class Case_frame():
+class CaseframeClass():
     def __init__(self, noun):
         self.noun = noun
         self.pairs = []

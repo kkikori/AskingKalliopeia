@@ -64,13 +64,18 @@ def _knp(sentence):
     return phrases
 
 
-def convert(sentence):
+def convert(sentence, combine=True):
     phs = _knp(sentence=sentence)
 
+    # knpでエラーが出た場合
     if not phs:
         return None
-    new_phs = {}  # 新しい結果を格納
 
+    # 合成処理をしない場合
+    if not combine:
+        return phs
+
+    new_phs = {}  # 新しい結果を格納
     for ph_i, ph in phs.items():
         new_phs[ph_i] = ph
 

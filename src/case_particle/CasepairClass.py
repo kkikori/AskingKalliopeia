@@ -1,4 +1,4 @@
-class case_pair():
+class CasepairClass():
     def __init__(self, th_i="", p_i="", s_i="", u_i="", particle="", predicate="", category=""):
         if th_i == "":
             self.th_i = None
