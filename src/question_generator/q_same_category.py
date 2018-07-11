@@ -1,6 +1,6 @@
 import random
 import sys
-import json
+import simplejson as json
 from collections import defaultdict
 import mynlp
 
