@@ -36,6 +36,7 @@ class TFIDF_pp():
         self.pos_l = ["名詞", "動詞", "形容詞"]
 
     def add_post_words(self, f, pi):
+        # 追加の投稿があった場合に辞書に追加したりする
         p_phs = mynlp.read_mrph_per_post(f, pi)
         # 調べるポストの単語を抽出
         add_words_to_dictionary = []

@@ -13,7 +13,7 @@ import mynlp
 """
 
 
-# 文からPhraseのツリーを生成する
+# 文からPhraseのツリーを生成
 def _knp(sentence):
     if sentence == "":
         return None
@@ -65,6 +65,7 @@ def _knp(sentence):
 
 
 def convert(sentence, combine=True):
+    # 構文木を返す
     phs = _knp(sentence=sentence)
 
     # knpでエラーが出た場合
