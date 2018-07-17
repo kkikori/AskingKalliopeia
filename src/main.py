@@ -44,10 +44,11 @@ def preparate_file_paths():
 def main(DEBUG):
     # 現在時刻の取得
     if DEBUG:
+        # 任意の自国の指定
         t = "2016-12-13 05:46:42"
         now_time = dt.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     else:
-        now_time = dt.datetime.now(pytz.utc)
+        now_time = dt.datetime.now(pytz.utc)    # kalliopeiaに併せて、イギリス時刻で取得
         n_str = now_time.strftime("%Y-%m-%dT%H:%M:%S")
         now_time = dt.datetime.strptime(n_str, "%Y-%m-%dT%H:%M:%S")
     print("now_time", now_time)
