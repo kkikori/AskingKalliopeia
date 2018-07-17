@@ -115,6 +115,9 @@ def _to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thres
         if s.component_type != "CLAIM":
             print("     not claim")
             continue
+        if not s.related_to:
+            print("    not related_to")
+            continue
         reply_to_si = related_to_post.si_list.index(s.related_to)
         # q2をやる
         if len(s.body) < 10 and re.search(r_only_nod, s.body):
