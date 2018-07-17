@@ -73,8 +73,8 @@ def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresho
             continue
             print("     not claim")
         elif re.search(r_question, s.body):
-            print("      re,search")
             # 質問文は除く措置
+            print("      re,search")
             continue
         else:
             phs = mynlp.read_mrph_per_sentence(f_path=f_paths["MRPH_ANALYSIS"], pi=target_pi, si=si)

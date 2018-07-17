@@ -1,4 +1,5 @@
 import mynlp
+from .CasepairClass import CasepairClass
 
 
 def _extract_self_sufficient_word(words):
@@ -8,7 +9,7 @@ def _extract_self_sufficient_word(words):
     return None
 
 
-def extract_cp(phs, th_i, p_i, s_i, u_i):
+def extract_cp(phs):
     if not phs:
         return []
     cps = []
@@ -28,5 +29,23 @@ def extract_cp(phs, th_i, p_i, s_i, u_i):
                 if not parent_self_w:
                     continue
 
-                cp = case_pair(th_i=th_i, p_i=p_i, s_i=s_i, u_i=u_i, particle=word.base, \
-                               predicate=parent_self_w.base, category=word.category)
+                cp = {}
+                cp["noun"] = previous_w.base
+                cp["particle"] = word.particle
+                cp["predicate"] = parent_self_w.base
+                cp["cateogory"] = word.category
+
+                cps.append(cp)
+    return cps
+
+
+def extract_cp_and_embed_class(phs, th_i, p_i, s_i, u_i):
+    if not phs:
+        return []
+    cps = extract_cp(phs)
+    cps_class_list = []
+    for cp in cps:
+        tmp = CasepairClass(th_i=th_i, p_i=p_i, s_i=s_i, u_i=u_i, particle=cp["particle"], \
+                            predicate=cp["predicate"], category=cp["category"])
+        cps_class_list.append({"noun": cp["noun"], "cp": tmp})
+    return cps
