@@ -1,6 +1,5 @@
 import sys
 import random
-from collections import defaultdict
 import simplejson as json
 
 import case_particle

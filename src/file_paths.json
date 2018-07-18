@@ -8,7 +8,8 @@
     "INDIVIDUAL_Q": "to_individual_q_list.csv",
     "POST_API": "PostApi",
     "MRPH_ANALYSIS": "MrphAnalysis",
-    "PAST_POST_LIST": "past_post_list.txt"
+    "PAST_POST_LIST": "past_post_list.txt",
+    "CASEFRAMES":"Caseframes"
   },
   {
     "DATA_ROOT": "/Users/ida/Dropbox/AskQuestion",
