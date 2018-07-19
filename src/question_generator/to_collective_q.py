@@ -1,5 +1,4 @@
 import re
-
 import question_generator
 
 r_only_nod = r"同意|賛成|同感|good|great|nice|agree"

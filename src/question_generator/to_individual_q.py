@@ -43,9 +43,9 @@ def to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, threshol
             # 質問文は除く措置
             continue
 
-        phs = mynlp.read_mrph_per_sentence(f_path=f_paths["MRPH_ANALYSIS"], pi=target_pi, si=si)
-        q1 = question_generator.no_premise_q_generator(sbody=s.body,
-                                                       fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"])
+        q1 = question_generator.no_premise_q_generator(post=post, pi=target_pi, s=s, si=si,
+                                                       fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"],\
+                                                       fn_mrph=f_paths["MRPH_ANALYSIS"])
 
         if q1:
             q = {"pi": target_pi, "si": si, "q_body": q1}
