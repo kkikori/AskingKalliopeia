@@ -49,11 +49,12 @@ def _preparate_per_thread(original_th, Post_list):
 
         new_p = preparation.PostClass(pi=o_p["id"], \
                                       created_at=o_p["created_at"], \
+                                      updated_at=o_p["updated_at"], \
                                       body=o_p["body"], \
                                       reply_to_id=o_p["in_reply_to_id"], \
-                                      user_id=o_p["user"],
-                                      sentences=sentences,
-                                      si_list=si_list,
+                                      user_id=o_p["user"], \
+                                      sentences=sentences, \
+                                      si_list=si_list, \
                                       belong_th_i=original_th["id"]
                                       )
         pi_list.append(new_p.id)

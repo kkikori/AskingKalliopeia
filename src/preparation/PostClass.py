@@ -1,12 +1,18 @@
 import datetime as dt
 
+
 # 投稿のクラス
 class PostClass():
-    def __init__(self, pi, created_at, body, reply_to_id, user_id, belong_th_i, sentences=None, si_list=None):
+    def __init__(self, pi, created_at, updated_at, body, reply_to_id, user_id, belong_th_i, sentences=None,
+                 si_list=None):
         self.id = pi
         # 2018-07-09T01:39:17.688781Z
         s = created_at.split(".")
         self.created_at = dt.datetime.strptime(s[0], "%Y-%m-%dT%H:%M:%S")
+        try:
+            self.updated_at = dt.datetime.strptime(s[0], "%Y-%m-%dT%H:%M:%S")
+        except:
+            self.updated_at = None
         self.body = body
         if not reply_to_id["Valid"]:
             self.reply_to_id = None
