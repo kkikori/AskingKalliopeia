@@ -4,7 +4,6 @@ import json
 import question_generator
 import mynlp
 
-
 r_question = r"\?$|？$|でしょうか"
 
 
@@ -49,13 +48,19 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     individual = True
     print("to_individual_q")
     for user_i, user in USERS.items():
-
         target_pi = user.pi_list[-1]
-        q = question_generator.to_individual_q(user=user, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, f_paths=f_paths,
-                             TFIDF_pp=TFIDF_pp, thresholds=thresholds, facilitator_i=facilitator_i)
+
+        if not POSTS[target_pi].updated_at:
+            # tagがついてない場合
+            target_pi = user.pi_list[-2]
+
+        q = question_generator.to_individual_q(user=user, target_pi=target_pi, \
+                                               post=POSTS[target_pi], now_time=now_time, f_paths=f_paths, \
+                                               TFIDF_pp=TFIDF_pp, thresholds=thresholds, \
+                                               facilitator_i=facilitator_i)
         if q:
             individual = False
-            _save_and_call_q(q["pi"], q["si"],q["q_body"],f_paths["POST_API"],f_paths["INDIVIDUAL_Q"])
+            _save_and_call_q(q["pi"], q["si"], q["q_body"], f_paths["POST_API"], f_paths["INDIVIDUAL_Q"])
 
     # 一回でもq1をやったら終わる
     # if individual:
@@ -69,10 +74,15 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     for th_i, thread in THREAD.items():
         print("  thread :", thread.title)
         target_pi = thread.pi_list[-1]
-        q = question_generator.to_collective_q(thread=thread, target_pi=target_pi, post=POSTS[target_pi], now_time=now_time, \
-                             f_paths=f_paths, TFIDF_pp=TFIDF_pp, thresholds=thresholds, POSTS=POSTS,
-                             facilitator_i=facilitator_i)
+        if not POSTS[target_pi].updated_at:
+            target_pi = thread.pi_list[-2]
+
+        q = question_generator.to_collective_q(thread=thread, target_pi=target_pi, \
+                                               post=POSTS[target_pi], now_time=now_time, \
+                                               f_paths=f_paths, TFIDF_pp=TFIDF_pp, \
+                                               thresholds=thresholds, POSTS=POSTS, \
+                                               facilitator_i=facilitator_i)
         if q:
-            _save_and_call_q(q["pi"], q["si"],q["q_body"],f_paths["POST_API"],f_paths["COLLECTIVE_Q"])
+            _save_and_call_q(q["pi"], q["si"], q["q_body"], f_paths["POST_API"], f_paths["COLLECTIVE_Q"])
 
     return
