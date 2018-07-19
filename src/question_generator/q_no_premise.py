@@ -14,10 +14,15 @@ def _read_templates(fn):
     return jsonData
 
 
-def no_premise_q_generator(sbody, fn_templates):
+def _make_rmsg(sbody, fn_templates):
     templates = _read_templates(fn=fn_templates)
     r_msg = ""
     r_msg += random.choice(templates["cushions"])
     r_msg += random.choice(templates["templates"])
     r_msg += "\n"
     return r_msg.replace("<s>",sbody)
+
+def no_premise_q_generator(s, fn_templates):
+    if s.has_premise >1:
+        return None
+    return _make_rmsg(s.body, fn_templates)

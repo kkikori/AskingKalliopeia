@@ -69,17 +69,17 @@ def _to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, thresho
         return False
         print("   judge is not")
     for si, s in enumerate(post.sentences):
-        if s.component_type != "CLAIM" or len(s.has_premise) > 1:
+        if s.component_type != "CLAIM":
             continue
             print("     not claim")
-        elif re.search(r_question, s.body):
+        if re.search(r_question, s.body):
             print("      re,search")
             # 質問文は除く措置
             continue
-        else:
-            phs = mynlp.read_mrph_per_sentence(f_path=f_paths["MRPH_ANALYSIS"], pi=target_pi, si=si)
-            q1 = question_generator.no_premise_q_generator(sbody=s.body,
-                                                           fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"])
+
+        phs = mynlp.read_mrph_per_sentence(f_path=f_paths["MRPH_ANALYSIS"], pi=target_pi, si=si)
+        q1 = question_generator.no_premise_q_generator(sbody=s.body,
+                                                       fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"])
 
         if q1:
             _save_and_call_q(pi=target_pi, si=si, q_body=q1, fn_postapi=f_paths["POST_API"],
