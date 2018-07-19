@@ -20,4 +20,4 @@ def no_premise_q_generator(sbody, fn_templates):
     r_msg += random.choice(templates["cushions"])
     r_msg += random.choice(templates["templates"])
     r_msg += "\n"
-    return r_msg + sbody
+    return r_msg.replace("<s>",sbody)
