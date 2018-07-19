@@ -2,7 +2,6 @@ import datetime
 import csv
 import json
 import question_generator
-import mynlp
 
 r_question = r"\?$|？$|でしょうか"
 

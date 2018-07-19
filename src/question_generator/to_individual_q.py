@@ -1,3 +1,7 @@
+import mynlp
+import question_generator
+
+
 def _judge_user_term(post, usr, now_time, thresholds):
     if (now_time - post.created_at) < thresholds["t_user"]:
         print("     time setting")
