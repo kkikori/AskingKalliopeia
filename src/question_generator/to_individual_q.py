@@ -1,6 +1,7 @@
-import mynlp
+import re
 import question_generator
 
+r_question = r"\?$|？$|でしょうか"
 
 def _judge_user_term(post, usr, now_time, thresholds):
     if (now_time - post.created_at) < thresholds["t_user"]:
