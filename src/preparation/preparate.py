@@ -57,7 +57,7 @@ def _preparate_per_thread(original_th, Post_list):
                 tt = s_t
 
         new_p = preparation.PostClass(pi=o_p["id"], \
-                                      created_at=o_p["created_at"], \
+                                      created_at=_time_seikei(o_p["created_at"]), \
                                       updated_at=tt, \
                                       body=o_p["body"], \
                                       reply_to_id=o_p["in_reply_to_id"], \
