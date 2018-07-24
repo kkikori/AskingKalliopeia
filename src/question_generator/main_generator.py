@@ -39,6 +39,7 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
 
 # ファイシリテータへの返信だったら、Trueを返す
 # スレッドの親投稿だったら、Trueを返す
+# それ以外はFalse
 def _exception_checker(target_pi, POSTS, facilitator_i):
     target_post = POSTS[target_pi]
     if not target_post.replpy_to_id:
