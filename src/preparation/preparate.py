@@ -1,5 +1,6 @@
 import sys
 import csv
+import datetime as dt
 import mynlp, preparation
 
 
@@ -34,22 +35,30 @@ def _has_premise(thread, Post_list):
                 Post_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
     return
 
+def _time_seikei(s):
+    #t = s.split(".")
+    return dt.datetime.strptime(s[:-1], "%Y-%m-%dT%H:%M:%S.%f")
 
 def _preparate_per_thread(original_th, Post_list):
     pi_list = []
     for o_p in original_th["posts"]:
         sentences = []
         si_list = []
+
+        tt = _time_seikei(o_p["updated_at"])
         for sentence in o_p["sentences"]:
             new_s = preparation.SentenceClass(si=sentence["id"], body=sentence["body"],
                                               related_to=sentence["related_to"],
                                               component_type=sentence["component_type"])
             sentences.append(new_s)
             si_list.append(new_s.id)
+            s_t = _time_seikei(sentence["updated_at"])
+            if tt < s_t:
+                tt = s_t
 
         new_p = preparation.PostClass(pi=o_p["id"], \
                                       created_at=o_p["created_at"], \
-                                      updated_at=o_p["updated_at"], \
+                                      updated_at=tt, \
                                       body=o_p["body"], \
                                       reply_to_id=o_p["in_reply_to_id"], \
                                       user_id=o_p["user"], \
@@ -78,8 +87,6 @@ def _preparate_users(users):
                                          pi_list=pi_list)
         if len(new_user.pi_list) > 0:
             User_list[usr["id"]] = new_user
-        else:
-            print("  not post user", new_user.name)
     return User_list
 
 

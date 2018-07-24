@@ -3,8 +3,6 @@ import csv
 import json
 import question_generator
 
-r_question = r"\?$|？$|でしょうか"
-
 
 def _setting_q_threshold(fn):
     f = fn.open("r")
@@ -48,10 +46,18 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     print("to_individual_q")
     for user_i, user in USERS.items():
         target_pi = user.pi_list[-1]
-
-        if not POSTS[target_pi].updated_at:
+        #"""
+        if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
+            print("           POSTS[target_pi] is not has updated_at")
+            print("                created_at",POSTS[target_pi].created_at,"  updated_at",POSTS[target_pi].updated_at)
             # tagがついてない場合
-            target_pi = user.pi_list[-2]
+            try:
+                target_pi = user.pi_list[-2]
+            except:
+                continue
+        #"""
+
+
 
         q = question_generator.to_individual_q(user=user, target_pi=target_pi, \
                                                post=POSTS[target_pi], now_time=now_time, f_paths=f_paths, \
@@ -73,8 +79,16 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     for th_i, thread in THREAD.items():
         print("  thread :", thread.title)
         target_pi = thread.pi_list[-1]
-        if not POSTS[target_pi].updated_at:
-            target_pi = thread.pi_list[-2]
+        #"""
+        if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
+            print("           POSTS[target_pi] is not has updated_at")
+            print("                created_at",POSTS[target_pi].created_at,"  updated_at",POSTS[target_pi].updated_at)
+            try:
+                target_pi = thread.pi_list[-2]
+            except:
+                continue
+        #"""
+
 
         q = question_generator.to_collective_q(thread=thread, target_pi=target_pi, \
                                                post=POSTS[target_pi], now_time=now_time, \
