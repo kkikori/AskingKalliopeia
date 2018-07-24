@@ -35,9 +35,11 @@ def _has_premise(thread, Post_list):
                 Post_list[relate_pi].sentences[relate_si].has_claim.append(sentence.id)
     return
 
+
 def _time_seikei(s):
-    #t = s.split(".")
+    # t = s.split(".")
     return dt.datetime.strptime(s[:-1], "%Y-%m-%dT%H:%M:%S.%f")
+
 
 def _preparate_per_thread(original_th, Post_list):
     pi_list = []
@@ -90,11 +92,14 @@ def _preparate_users(users):
     return User_list
 
 
-def _previous_qs(Threads_list, Post_list, User_list, f_individual, f_collective):
-    # 過去に問いかけしたデータを読み込む
+def _previous_qs(Threads_list, Post_list, User_list, f_individual=None, f_collective=None):
+    if not f_individual:
+        return
+
+        # 過去に問いかけしたデータを読み込む
     if not f_individual.exists():
         print("[FILE ERROR]", f_individual, "is not found.")
-        sys.exit()
+        return
 
     with f_individual.open("r") as f:
         reader = csv.reader(f)
