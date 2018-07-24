@@ -38,8 +38,12 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
 
 
 # ファイシリテータへの返信だったら、Trueを返す
-def _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+# スレッドの親投稿だったら、Trueを返す
+def _exception_checker(target_pi, POSTS, facilitator_i):
     target_post = POSTS[target_pi]
+    if not target_post.replpy_to_id:
+        return True
+
     reply_to = POSTS[target_post.replpy_to_id]
     if POSTS[reply_to].user_id == facilitator_i:
         return True
@@ -68,8 +72,8 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
             except:
                 continue
 
-        # ファシリテータへの返信だったら、アウトにする
-        if _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+        # 問いかけ対象外を弾く
+        if _exception_checker(target_pi, POSTS, facilitator_i):
             continue
 
         q = question_generator.to_individual_q(user=user, target_pi=target_pi, \
@@ -103,8 +107,8 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
                 continue
         # """
 
-        # ファシリテータへの返信だったら、アウトにする
-        if _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+        # 問いかけ対象外を除く
+        if _exception_checker(target_pi, POSTS, facilitator_i):
             continue
 
         q = question_generator.to_collective_q(thread=thread, target_pi=target_pi, \
