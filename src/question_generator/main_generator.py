@@ -4,6 +4,7 @@ import json
 import question_generator
 
 
+# 時間とかの条件を読み込む
 def _setting_q_threshold(fn):
     f = fn.open("r")
     jsonData = json.load(f)
@@ -16,6 +17,7 @@ def _setting_q_threshold(fn):
     return thresholds
 
 
+# 2箇所に発言内容を保存する
 def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
     # save to file
     add_row = [pi, si, q_body]
@@ -35,6 +37,15 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
     return
 
 
+# ファイシリテータへの返信だったら、Trueを返す
+def _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+    target_post = POSTS[target_pi]
+    reply_to = POSTS[target_post.replpy_to_id]
+    if POSTS[reply_to].user_id == facilitator_i:
+        return True
+    return False
+
+
 def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilitator_i):
     # 閾値の設定
     thresholds = _setting_q_threshold(f_paths["SETTING"])
@@ -46,18 +57,20 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     print("to_individual_q")
     for user_i, user in USERS.items():
         target_pi = user.pi_list[-1]
-        #"""
+        # 構造解析器により注釈がつけられていない場合（時刻で判定）
         if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
             print("           POSTS[target_pi] is not has updated_at")
-            print("                created_at",POSTS[target_pi].created_at,"  updated_at",POSTS[target_pi].updated_at)
+            print("                created_at", POSTS[target_pi].created_at, "  updated_at",
+                  POSTS[target_pi].updated_at)
             # tagがついてない場合
             try:
                 target_pi = user.pi_list[-2]
             except:
                 continue
-        #"""
 
-
+        # ファシリテータへの返信だったら、アウトにする
+        if _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+            continue
 
         q = question_generator.to_individual_q(user=user, target_pi=target_pi, \
                                                post=POSTS[target_pi], now_time=now_time, f_paths=f_paths, \
@@ -79,16 +92,20 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     for th_i, thread in THREAD.items():
         print("  thread :", thread.title)
         target_pi = thread.pi_list[-1]
-        #"""
+        # """
         if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
             print("           POSTS[target_pi] is not has updated_at")
-            print("                created_at",POSTS[target_pi].created_at,"  updated_at",POSTS[target_pi].updated_at)
+            print("                created_at", POSTS[target_pi].created_at, "  updated_at",
+                  POSTS[target_pi].updated_at)
             try:
                 target_pi = thread.pi_list[-2]
             except:
                 continue
-        #"""
+        # """
 
+        # ファシリテータへの返信だったら、アウトにする
+        if _reply_facilitator_checker(target_pi, POSTS, facilitator_i):
+            continue
 
         q = question_generator.to_collective_q(thread=thread, target_pi=target_pi, \
                                                post=POSTS[target_pi], now_time=now_time, \
