@@ -33,9 +33,12 @@ def to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, threshol
 
     judge = _judge_user_term(post=post, usr=user, now_time=now_time, thresholds=thresholds)
     if not judge:
-        return False
         print("   judge is not")
+        return False
+
+    #print("         ",post.sentences[-1])
     for si, s in enumerate(post.sentences):
+        print("        ",s.body)
         if s.component_type != "CLAIM":
             continue
             print("     not claim")

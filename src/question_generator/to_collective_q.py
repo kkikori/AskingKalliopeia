@@ -65,7 +65,7 @@ def to_collective_q(thread, target_pi, post, now_time, f_paths, TFIDF_pp, thresh
                                                           th_title=thread.title, f_mrph=f_paths["MRPH_ANALYSIS"], \
                                                           f_same=f_paths["SAME_CATEGORY_Q_TEMPLATES"])
         if q4:
-            q = {"q1": target_pi, "si": si, "q_body": q4}
+            q = {"pi": target_pi, "si": si, "q_body": q4}
             #_save_and_call_q(pi=target_pi, si=si, q_body=q4, fn_postapi=f_paths["POST_API"], f_save=f_paths["COLLECTIVE_Q"])
             return q
         else:

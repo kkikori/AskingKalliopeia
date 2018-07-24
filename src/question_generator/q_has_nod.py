@@ -28,4 +28,4 @@ def has_nod_q_generator(post, si, thread_title,fn):
             premise_s = post.sentences[si + 1].body
             return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("<s2>", premise_s)
 
-    return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("　- 『<s2>』", "")
+    return select_template.replace("<title>", thread_title).replace("<s1>", claim_s).replace("　> 『<s2>』", "")
