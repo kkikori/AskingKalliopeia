@@ -2,7 +2,7 @@ import simplejson as json
 import mynlp
 from .CasepairClass import CasepairClass
 from .CaseframeClass import CaseframeClass
-from .extract_cp import extract_cp
+from .extract_cp import extract_cp_and_embed_class
 from .update_cases_file import update_cases_file
 
 
@@ -39,7 +39,7 @@ def preparate_caseparticle(f_cases, f_mrph, Post_list, new_post_pi_list, stop_wo
         p_phs = mynlp.read_mrph_per_post(f_mrph, pi)
         post = Post_list[pi]
         for si, phs in enumerate(p_phs):
-            cps = extract_cp(phs, post.belong_th_i, pi, si, post.user_id)
+            cps = extract_cp_and_embed_class(phs, post.belong_th_i, pi, si, post.user_id)
             if len(cps) == 0:
                 continue
             for cp in cps:
