@@ -74,6 +74,7 @@ def convert(sentence, combine=True):
 
     # 合成処理をしない場合
     if not combine:
+        print(" not combine")
         return phs
 
     new_phs = {}  # 新しい結果を格納

@@ -3,7 +3,7 @@ import mynlp
 from .CasepairClass import CasepairClass
 from .CaseframeClass import CaseframeClass
 from .extract_cp import extract_cp_and_embed_class
-from .update_cases_file import update_cases_file
+from .update_case_file import update_cases_file
 
 
 # クラスへの埋め込み
@@ -36,17 +36,21 @@ def preparate_caseparticle(f_cases, f_mrph, Post_list, new_post_pi_list, stop_wo
     # 新しいやつをやる
     update_nouns = set()  # 上書きする必要があるファイルリスト
     for pi in new_post_pi_list:
+        # print("new pi", pi)
         p_phs = mynlp.read_mrph_per_post(f_mrph, pi)
         post = Post_list[pi]
         for si, phs in enumerate(p_phs):
             cps = extract_cp_and_embed_class(phs, post.belong_th_i, pi, si, post.user_id)
             if len(cps) == 0:
+                # print("               ", post.sentences[si].body)
                 continue
             for cp in cps:
                 if cp["noun"] in stop_word_list:
                     continue
                 if cp["noun"] not in Caseframe_list.keys():
+                    # print("      ",cp["noun"])
                     Caseframe_list[cp["noun"]] = CaseframeClass(noun=cp["noun"])
+                # print("     ",cp.keys())
                 Caseframe_list[cp["noun"]].pairs.append(cp["cp"])
                 update_nouns.add(cp["noun"])
 
