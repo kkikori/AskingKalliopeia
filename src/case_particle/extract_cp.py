@@ -9,33 +9,25 @@ def _extract_self_sufficient_word(words):
     return None
 
 
+# “名詞＋格助詞＋形容詞or動詞”を抽出
+# dict型で返す
 def extract_cp(phs):
-    # print("extract_cp")
     if not phs:
         return []
     cps = []
     for pi, ph in phs.items():
-        # print("  pi", pi)
         previous_w = mynlp.WordClass()
         if not ph.parent_id:
-            # print("     it has't parent")
             continue
-        # print(" words")
         for word in ph.words:
-            # print("   now", word.base)
-            # print("   previous", previous_w.base)
             if previous_w.pos_detail == "形式名詞":
-                # print(" 形式名詞")
                 previous_w = word
                 continue
             if word.pos_detail == "格助詞" and previous_w.pos == "名詞":
-                # print("   word", word.pos_detail)
-                # print("   ", previous_w)
                 if ph.parent_id < 0:
                     previous_w = word
                     continue
                 parent = phs[ph.parent_id]
-                # print(parent)
                 parent_self_w = _extract_self_sufficient_word(parent.words)
                 if not parent_self_w:
                     previous_w = word
@@ -51,7 +43,7 @@ def extract_cp(phs):
             previous_w = word
     return cps
 
-
+# “名詞＋格助詞＋形容詞or動詞”を抽出
 def extract_cp_and_embed_class(phs, th_i, p_i, s_i, u_i):
     if not phs:
         return []
