@@ -68,6 +68,7 @@ def main(DEBUG):
     # ファシリテータのid
     print("ファシリテータのid")
     facilitator_i = toKalliopeia.read_user_id(users_data, ACCESS_TOKEN["name"])
+    supervisor_i = toKalliopeia.read_user_id(users_data, "adam")
 
     # 形態素解析部
     if DEBUG:
@@ -100,7 +101,7 @@ def main(DEBUG):
         print("*" * 10, "question generate", "*" * 20)
     # 問いかけ生成
     question_generator.q_generator_main(POSTS=POSTS, THREAD=THREAD, USERS=USERS, f_paths=f_paths, TFIDF_pp=TFIDF_pp,
-                                        now_time=now_time, facilitator_i=facilitator_i)
+                                        now_time=now_time, facilitator_i=facilitator_i,supervisor_i=supervisor_i)
 
     toKalliopeia.create_post_main(fn=f_paths["POST_API"], token=token)
 

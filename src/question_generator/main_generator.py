@@ -42,16 +42,18 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
 # それ以外はFalse
 def _exception_checker(target_pi, POSTS, facilitator_i):
     target_post = POSTS[target_pi]
+    # 親投稿かどうかの判定
     if not target_post.reply_to_id:
         return True
 
+    # ファシリテータへの返信か判定
     reply_to = POSTS[target_post.replpy_to_id]
     if POSTS[reply_to].user_id == facilitator_i:
         return True
     return False
 
 
-def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilitator_i):
+def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilitator_i, supervisor_i):
     # 閾値の設定
     thresholds = _setting_q_threshold(f_paths["SETTING"])
 
@@ -61,6 +63,10 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     individual = True
     print("to_individual_q")
     for user_i, user in USERS.items():
+        # 管理者は除く
+        if user_i == supervisor_i:
+            continue
+
         target_pi = user.pi_list[-1]
         # 構造解析器により注釈がつけられていない場合（時刻で判定）
         if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
@@ -97,6 +103,13 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     for th_i, thread in THREAD.items():
         print("  thread :", thread.title)
         target_pi = thread.pi_list[-1]
+        # 管理者に対する処理
+        if POSTS[target_pi].user_id == supervisor_i:
+            try:
+                target_pi = thread.pi_list[-2]
+            except:
+                continue
+
         # """
         if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
             print("           POSTS[target_pi] is not has updated_at")
