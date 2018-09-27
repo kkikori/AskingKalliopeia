@@ -49,3 +49,8 @@ def load_user(token, ui):
 
 def create_post(token, data):
     _send(endpoint="posts", token=token, data=data, type="post")
+
+
+def create_user(token, data):
+    _send(endpoint="signup", token=token, data=data, type="post")
+
