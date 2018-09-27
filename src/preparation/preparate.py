@@ -37,8 +37,11 @@ def _has_premise(thread, Post_list):
 
 
 def _time_seikei(s):
-    # t = s.split(".")
-    return dt.datetime.strptime(s[:-1], "%Y-%m-%dT%H:%M:%S.%f")
+    # print(s)
+    t = s.split("+")
+    s = t[0]
+    # print(s)
+    return dt.datetime.strptime(s, "%Y-%m-%dT%H:%M:%S.%f")
 
 
 def _preparate_per_thread(original_th, Post_list):

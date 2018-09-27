@@ -42,7 +42,7 @@ def _save_and_call_q(pi, si, q_body, fn_postapi, f_save):
 # それ以外はFalse
 def _exception_checker(target_pi, POSTS, facilitator_i):
     target_post = POSTS[target_pi]
-    if not target_post.replpy_to_id:
+    if not target_post.reply_to_id:
         return True
 
     reply_to = POSTS[target_post.replpy_to_id]

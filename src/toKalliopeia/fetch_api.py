@@ -3,7 +3,9 @@ import requests
 
 
 def _send(endpoint, type, data=None, token=None):
-    uri = 'http://api.kalliopeia.killedbynlp.com/' + endpoint
+    # uri = 'http://api.kalliopeia.killedbynlp.com/' + endpoint
+    uri = "https://api.kalliopeia.ijcai-20.org/" + endpoint
+    # uri = "http://localhost:8081/" + endpoint
     data = json.dumps(data)
     headers = {
         'Content-Type': 'application/json'
@@ -21,7 +23,7 @@ def _send(endpoint, type, data=None, token=None):
 def get_access_token(name, password):
     request_data = {
         'name': name,
-        'password': password,
+        'password': password
     }
     response = _send(endpoint='login', data=request_data, type='post')
     return response['token']
@@ -46,4 +48,4 @@ def load_user(token, ui):
 
 
 def create_post(token, data):
-    _send(endpoint="posts", token=token, data=data,type="post")
+    _send(endpoint="posts", token=token, data=data, type="post")
