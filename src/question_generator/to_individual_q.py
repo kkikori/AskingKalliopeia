@@ -3,9 +3,10 @@ import question_generator
 
 r_question = r"\?$|？$|でしょうか"
 
+
 def _judge_user_term(post, usr, now_time, thresholds):
     if (now_time - post.created_at) < thresholds["t_user"]:
-        print("     time setting")
+        print("     time setting", post.created_at)
         return False
 
     # 今まで一度も問いかけしていなかったら
@@ -36,9 +37,9 @@ def to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, threshol
         print("   judge is not")
         return False
 
-    #print("         ",post.sentences[-1])
+    # print("         ",post.sentences[-1])
     for si, s in enumerate(post.sentences):
-        print("        ",s.body)
+        print("        ", s.body)
         if s.component_type != "CLAIM":
             continue
             print("     not claim")
@@ -46,9 +47,12 @@ def to_individual_q(user, target_pi, post, now_time, f_paths, TFIDF_pp, threshol
             print("      re,search")
             # 質問文は除く措置
             continue
+        if len(s.body) < 7:
+            print("      short", s.body)
+            continue
 
         q1 = question_generator.no_premise_q_generator(post=post, pi=target_pi, s=s, si=si,
-                                                       fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"],\
+                                                       fn_templates=f_paths["NO_PREMISE_Q_TEMPLATES"], \
                                                        fn_mrph=f_paths["MRPH_ANALYSIS"])
 
         if q1:
