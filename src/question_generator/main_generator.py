@@ -47,7 +47,7 @@ def _exception_checker(target_pi, POSTS, facilitator_i):
         return True
 
     # ファシリテータへの返信か判定
-    reply_to = POSTS[target_post.replpy_to_id]
+    reply_to = POSTS[target_post.reply_to_id]
     if POSTS[reply_to].user_id == facilitator_i:
         return True
     return False
