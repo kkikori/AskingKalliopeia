@@ -4,7 +4,7 @@ import requests
 
 def _send(endpoint, type, data=None, token=None):
     # uri = 'http://api.kalliopeia.killedbynlp.com/' + endpoint
-    uri = "https://api.kalliopeia.ijcai-20.org/" + endpoint
+    uri = "http://api.kalliopeia.ijcai-20.org/" + endpoint
     # uri = "http://localhost:8081/" + endpoint
     data = json.dumps(data)
     headers = {
