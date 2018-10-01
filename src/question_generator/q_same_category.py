@@ -69,7 +69,8 @@ def _same_category(p_category, c_category, th_title, fn):
         c = "、".join(category_words)
     r_msg = random.choice(templates["cushions"])
     r_t = random.choice(templates["templates"])
-    # r_t = r_t.replace("<c>", c).replace("<title>", th_title)
+    #r_t = r_t.replace("<c>", c).replace("<title>", th_title)
+    r_t = r_t.replace("<c>", c)
 
     return r_msg + r_t
 
