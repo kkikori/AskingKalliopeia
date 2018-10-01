@@ -69,7 +69,8 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
 
         target_pi = user.pi_list[-1]
         # 構造解析器により注釈がつけられていない場合（時刻で判定）
-        if not POSTS[target_pi].created_at < POSTS[target_pi].updated_at:
+        # お知らせスレッドに対する投稿は無視
+        if (not POSTS[target_pi].created_at < POSTS[target_pi].updated_at) or POSTS[target_pi].belong_th_i == 1:
             print("           POSTS[target_pi] is not has updated_at")
             print("                created_at", POSTS[target_pi].created_at, "  updated_at",
                   POSTS[target_pi].updated_at)
@@ -102,6 +103,9 @@ def q_generator_main(POSTS, THREAD, USERS, f_paths, TFIDF_pp, now_time, facilita
     print("to_collective_q")
     for th_i, thread in THREAD.items():
         print("  thread :", thread.title)
+        if th_i == 1:
+            continue
+
         target_pi = thread.pi_list[-1]
         # 管理者に対する処理
         if POSTS[target_pi].user_id == supervisor_i:
